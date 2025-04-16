@@ -89,7 +89,29 @@ const getSingleTemp = (heure) => {
   return { "message": "il ya pas un temperature avec cette heure" }
 }
 
-const getTempData = () => { return tempratureData }
+const avgTemp = (metric) => {
+  let somme = 0
+  for (let index = 0; index < tempratureData.length; index++) {
+    const element = tempratureData.at(index);
+    if (metric == "C") {
+      element.metrique == "celsius" ? somme += element.temperature : somme += ((element.temperature - 32) / 1.8)
+    } else if (metric == "F") {
+      element.metrique == "fahrenheit" ? somme += element.temperature : somme += (element.temperature * 1.8 + 32)
+    }
+  }
+  return {
+    "metrique": metric, "avgTemp": somme / tempratureData.length
+  }
+
+}
+
+const getTempData = (from = 0, to = tempratureData.length - 1, avg = false, metric = 'C') => {
+  if (avg == "true") {
+    return avgTemp(metric)
+  } else {
+    return tempratureData.slice(from, to)
+  }
+}
 
 module.exports = { getTempData, isAM, isHeureValide, getSingleTemp, AMto24 }
 
